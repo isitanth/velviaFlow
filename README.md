@@ -1,4 +1,4 @@
-# velviaflow
+# velviaFlow CLI
 
 **Author:** Anthony Chambet  
 **Target:** Fujifilm SD cards (X-T series, macOS arm64)  
