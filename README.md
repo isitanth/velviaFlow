@@ -39,7 +39,7 @@ velviaflow -start       # Initialize workspace & copy files
 velviaflow -stats       # Show totals (photos, videos, size)
 velviaflow -backup      # Sort & copy files with manifest
 velviaflow -cleanup     # Safely remove inbox files
-velviaflow -v           # ASCII art banner + version info
+velviaflow -v           # Version info
 ```
 
 > Each run creates or reuses a **workspace** under `workdir/` to guarantee **safe-by-default operations** and prevent accidental data loss.
@@ -55,7 +55,7 @@ sudo make install   # Installs velviaflow into /usr/local/bin/
 
 Dependencies:  
 - **clang** (C17)  
-- macOS ARM64 (M1/M2 tested)
+- macOS ARM64 (only M1 Pro tested)
 
 ---
 
