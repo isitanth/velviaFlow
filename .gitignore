@@ -1,0 +1,9 @@
+# Compilation .o files to skip in version control
+*.o
+velviaflow
+
+# macOS specific files
+.DS_Store
+
+# The work directory contains photos, which raises privacy issues.
+workdir/
