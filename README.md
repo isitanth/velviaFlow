@@ -1,6 +1,5 @@
 # velviaFlow CLI
 
-**Author:** Anthony Chambet  
 **Target:** Fujifilm SD cards (X-T series, macOS arm64)  
 **Purpose:** Terminal-first workflow utility for photographers. Creates a dedicated workspace for each run to ensure safe handling of photos/videos, with backup, stats, and cleanup features.  
 **Tested with:** Fujifilm X-T5
