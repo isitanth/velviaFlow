@@ -49,6 +49,26 @@ int op_check(const char *volumes_root) {
     return 0;
 }
 
+// Auto-detect first SD card with DCIM containing media
+int find_first_sd_card(char *out, size_t out_size) {
+    const char *volumes_root = "/Volumes";
+    FILE *p;
+    char cmd[PATH_MAX+64]; snprintf(cmd, sizeof(cmd), "find '%s' -maxdepth 1 -type d -print", volumes_root);
+    p = popen(cmd, "r"); if (!p) return 0;
+
+    char line[PATH_MAX];
+    while (fgets(line, sizeof(line), p)) {
+        size_t n=strlen(line); if (n && line[n-1]=='\n') line[n-1]='\0';
+        if (has_sd_like(line)) {
+            pclose(p);
+            snprintf(out, out_size, "%s", line);
+            return 1;
+        }
+    }
+    pclose(p);
+    return 0;
+}
+
 /// ---------- start (workspace init + import) ----------
 typedef struct {
     const start_opts_t *o;

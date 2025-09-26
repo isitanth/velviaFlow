@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <sys/param.h>  // for PATH_MAX
 
 static void usage(void) {
     puts("velviaflow — Fujifilm SD photo workflow (macOS, arm64)");
@@ -11,12 +12,13 @@ static void usage(void) {
     puts("USAGE");
     puts("  velviaflow -v | -version | --version");
     puts("  velviaflow -check [--src /Volumes]");
-    puts("  velviaflow -start  --src <sd_root> --workdir <dir> [--all | --ext raf,jpg,mov] [--dry-run]");
+    puts("  velviaflow -start  [--src <sd_root>] [--workdir <dir>] [--all | --ext raf,jpg,mov] [--dry-run]");
     puts("  velviaflow -stats  --workdir <dir>");
     puts("  velviaflow -backup --workdir <dir> [--dry-run] [--manifest <file>]");
     puts("  velviaflow -cleanup --manifest <file> [--force] [--dry-run]");
     puts("");
     puts("NOTES");
+    puts("  -start auto-detects SD card if --src omitted, uses './workdir' if --workdir omitted.");
     puts("  -start is mandatory before -stats/-backup/-cleanup.");
     puts("  Workspace layout: <workdir>/{.velviaflow, inbox/, velviaSort/}");
 }
@@ -45,7 +47,25 @@ int run_cli(int argc, char **argv) {
             else if (!strcmp(argv[i],"--ext") && i+1<argc) o.ext_csv=argv[++i];
             else if (!strcmp(argv[i],"--dry-run")) o.dry_run=true;
         }
-        if (!o.src || !o.workdir) { usage(); return 1; }
+        
+        // Auto-detect SD card if --src not provided
+        static char auto_src[PATH_MAX];
+        if (!o.src) {
+            if (find_first_sd_card(auto_src, sizeof(auto_src))) {
+                o.src = auto_src;
+                printf("Auto-detected SD card: %s\n", o.src);
+            } else {
+                fprintf(stderr, "No SD card detected. Please plug in your SD card or specify --src manually.\n");
+                return 1;
+            }
+        }
+        
+        // Default workspace if --workdir not provided
+        if (!o.workdir) {
+            o.workdir = "./workdir";
+            printf("Using default workspace: %s\n", o.workdir);
+        }
+        
         if (!o.select_all && !o.ext_csv) o.select_all = true; // default: import all media
         return op_start(&o);
     }

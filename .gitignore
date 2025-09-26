@@ -7,3 +7,9 @@ velviaflow
 
 # The work directory contains photos, which raises privacy issues.
 workdir/
+
+# WARP configuration file (IDE-specific)
+WARP.md
+
+# Test scenario files
+test_scenario/
